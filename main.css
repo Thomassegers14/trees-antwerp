@@ -1,0 +1,84 @@
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+.mapboxgl-popup {
+  max-width: 400px;
+  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.map-overlay {
+  position: absolute;
+  width: 25%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  font: 12px/20px 'Roboto', Arial, Helvetica, sans-serif;
+  background-color: #212121;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.map-overlay fieldset {
+  display: none;
+  background: #212121;
+  border: none;
+  padding: 24px 12px;
+  margin: 0;
+}
+
+.map-overlay input {
+  display: block;
+  background: #424242;
+  border: none;
+  border-bottom: 1px solid #fa595b;
+  width: 100%;
+  padding: 12px;
+  margin: 0;
+  box-sizing: border-box;
+  color: white;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+.map-overlay .listing {
+  overflow: auto;
+  max-height: 100%;
+  cursor: pointer;
+}
+
+.map-overlay .listing > * {
+  display: block;
+  padding: 3px 12px;
+  margin: 0;
+}
+
+.map-overlay .listing a {
+  border-bottom: 1px solid #424242;
+  color: white;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: border-bottom 500ms, color 500ms;
+}
+
+.map-overlay .listing a:last-child {
+  border: none;
+}
+
+.map-overlay .listing a:hover {
+  border-bottom: 1px solid #fa595b;
+  color: #fa595b;
+}
+
+.map-overlay h3 {
+  color: white;
+  font-size: 1rem;
+  padding: 24px 12px;
+  line-height: 3;
+  border-bottom: 1px solid #fa595b;
+}
