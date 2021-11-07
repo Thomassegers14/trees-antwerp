@@ -6,7 +6,7 @@ const map = new mapboxgl.Map({
   // style: 'mapbox://styles/mapbox/light-v10',
   zoom: 13,
   minZoom: 13,
-  center: [4.418639413310029, 51.212040233601485]
+  center: [4.418412511712686, 51.20279712915063]
 })
 
 // Holds visible airport features for filtering
@@ -28,7 +28,7 @@ function renderListings(features) {
   if (features.length) {
     for (const feature of features) {
       const itemLink = document.createElement('a');
-      let label = `<p>${feature.properties.LATBOOMSOORT} <span>(${Math.round(feature.properties.dst/1000 * 2)/2}km)</span></p>`;
+      let label = `${feature.properties.LATBOOMSOORT} <span>${Math.round(feature.properties.dst)}m</span>`;
       itemLink.target = '_blank';
       itemLink.innerHTML = label;
       itemLink.addEventListener('mouseover', () => {
@@ -94,7 +94,7 @@ map.on('mouseenter', 'data-driven-circles', (event) => {
 
   popup
     .setLngLat(feature.geometry.coordinates)
-    .setHTML(`<h3>${feature.properties.GENUS}</h3><p>${feature.properties.LATBOOMSOORT}</p>`)
+    .setHTML(`<h3>${feature.properties.LATBOOMSOORT}</h3><p>${feature.properties.STAMOMTREK} cm</p>`)
     .addTo(map);
 
 });
