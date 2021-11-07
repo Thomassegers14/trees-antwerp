@@ -1,5 +1,14 @@
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
 
 .mapboxgl-popup {
   max-width: 400px;
@@ -8,12 +17,13 @@ body { margin: 0; padding: 0; }
 
 .map-overlay {
   position: absolute;
-  width: 25%;
-  top: 0;
+  width: 100%;
+  top: 65vh;
   bottom: 0;
   left: 0;
   font: 12px/20px 'Roboto', Arial, Helvetica, sans-serif;
   background-color: #212121;
+  z-index: 2;
   max-height: 100%;
   overflow: hidden;
 }
@@ -46,7 +56,7 @@ input:focus {
 
 .map-overlay .listing {
   overflow: auto;
-  max-height: 100%;
+  max-height: 500px;
   cursor: pointer;
 }
 
@@ -59,7 +69,7 @@ input:focus {
 .map-overlay .listing a {
   border-bottom: 1px solid #424242;
   color: white;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-decoration: none;
@@ -81,4 +91,15 @@ input:focus {
   padding: 24px 12px;
   line-height: 3;
   border-bottom: 1px solid #fa595b;
+}
+
+@media only screen and (min-width: 767px) {
+  .map-overlay {
+    width: 25%;
+    top: 0;
+  }
+
+  .map-overlay .listing a {
+    font-size: 0.7rem;
+  }
 }
