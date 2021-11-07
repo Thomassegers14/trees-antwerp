@@ -98,8 +98,4 @@ input:focus {
     width: 25%;
     top: 0;
   }
-
-  .map-overlay .listing a {
-    font-size: 0.7rem;
-  }
 }

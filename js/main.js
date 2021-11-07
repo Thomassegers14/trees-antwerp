@@ -28,15 +28,15 @@ function renderListings(features) {
   if (features.length) {
     for (const feature of features) {
       const itemLink = document.createElement('a');
-      const label = `${feature.properties.LATBOOMSOORT} (${Math.round(feature.properties.dst/1000 * 2)/2}km)`;
+      let label = `<p>${feature.properties.LATBOOMSOORT} <span>(${Math.round(feature.properties.dst/1000 * 2)/2}km)</span></p>`;
       itemLink.target = '_blank';
-      itemLink.textContent = label;
+      itemLink.innerHTML = label;
       itemLink.addEventListener('mouseover', () => {
 
         // Highlight corresponding feature on the map
         popup
           .setLngLat(feature.geometry.coordinates)
-          .setText(label)
+          .setHTML(label)
           .addTo(map);
       });
       listingEl.appendChild(itemLink);
@@ -109,6 +109,8 @@ map.on('moveend', () => {
     layers: ['data-driven-circles']
   });
 
+  features.sort(function(a, b){return a.properties.dst - b.properties.dst});
+
   if (features) {
     const uniqueFeatures = getUniqueFeatures(features, 'LATBOOMSOORT');
     // Populate features for the listing overlay.
@@ -128,6 +130,8 @@ map.on('load', () => {
     layers: ['data-driven-circles']
   });
 
+  features.sort(function(a, b){return a.properties.dst - b.properties.dst});
+
   if (features) {
     const uniqueFeatures = getUniqueFeatures(features, 'LATBOOMSOORT');
     // Populate features for the listing overlay.
@@ -141,6 +145,19 @@ map.on('load', () => {
     airports = uniqueFeatures;
   }
 });
+
+// Add geolocate control to the map.
+map.addControl(
+  new mapboxgl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true
+    },
+    // When active the map will receive updates to the device's location as it changes.
+    trackUserLocation: true,
+    // Draw an arrow next to the location dot to indicate which direction the device is heading.
+    showUserHeading: true
+  })
+);
 
 filterEl.addEventListener('keyup', (e) => {
   const value = normalize(e.target.value);
