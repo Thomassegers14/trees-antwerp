@@ -21,10 +21,10 @@ const filterEl = document.getElementById('feature-filter');
 const listingEl = document.getElementById('feature-listing');
 
 function renderListings(features) {
-  const empty = document.createElement('h3');
+  const empty = document.createElement('p');
 
   const featuresLength = document.getElementById('feature-length');
-  let length = `Aantal bomen gevonden: ${features.length}`;
+  let length = `Trees found: ${features.length}`;
   featuresLength.innerHTML = length;
 
   // Clear any existing listings
@@ -59,6 +59,8 @@ function renderListings(features) {
     // Hide the filter input
     filterEl.parentNode.style.display = 'none';
 
+    resetMap()
+
   }
 }
 
@@ -83,7 +85,12 @@ function getUniqueFeatures(features, comparatorProperty) {
 }
 
 function resetMap() {
-  console.log("this should work");
+  map.setFilter('data-driven-circles', ['has', 'OBJECTID']);
+  filterEl.value = '';
+}
+
+map.on('load', () => {
+
   const features = map.queryRenderedFeatures({
     layers: ['data-driven-circles']
   });
@@ -92,17 +99,32 @@ function resetMap() {
 
   if (features) {
     const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
-    // Populate features for the listing overlay.
     renderListings(uniqueFeatures);
-
-    // Clear the input container
     filterEl.value = '';
-
-    // Store the current features in sn `airports` variable to
-    // later use for filtering on `keyup`.
     trees = uniqueFeatures;
   }
-}
+
+  map.on('movestart', () => {
+    resetMap()
+  });
+
+  map.on('moveend', () => {
+    const features = map.queryRenderedFeatures({
+      layers: ['data-driven-circles']
+    });
+
+    features.sort(function(a, b){return a.properties.dst - b.properties.dst});
+
+    if (features) {
+      const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
+
+      renderListings(uniqueFeatures);
+
+      trees = uniqueFeatures;
+    }
+  });
+
+});
 
 map.on('mouseenter', 'data-driven-circles', (event) => {
 
@@ -127,45 +149,6 @@ map.on('mouseenter', 'data-driven-circles', (event) => {
 map.on('mouseleave', 'data-driven-circles', () => {
   map.getCanvas().style.cursor = '';
   popup.remove();
-});
-
-map.on('moveend', () => {
-  const features = map.queryRenderedFeatures({
-    layers: ['data-driven-circles']
-  });
-
-  features.sort(function(a, b){return a.properties.dst - b.properties.dst});
-
-  if (features) {
-    const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
-    // Populate features for the listing overlay.
-    renderListings(uniqueFeatures);
-
-    // Store the current features in sn `airports` variable to
-    // later use for filtering on `keyup`.
-    trees = uniqueFeatures;
-  }
-});
-
-map.on('load', () => {
-  const features = map.queryRenderedFeatures({
-    layers: ['data-driven-circles']
-  });
-
-  features.sort(function(a, b){return a.properties.dst - b.properties.dst});
-
-  if (features) {
-    const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
-    // Populate features for the listing overlay.
-    renderListings(uniqueFeatures);
-
-    // Clear the input container
-    filterEl.value = '';
-
-    // Store the current features in sn `airports` variable to
-    // later use for filtering on `keyup`.
-    trees = uniqueFeatures;
-  }
 });
 
 // Add geolocate control to the map.
