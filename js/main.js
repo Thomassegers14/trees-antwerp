@@ -10,7 +10,7 @@ const map = new mapboxgl.Map({
 })
 
 // Holds visible airport features for filtering
-let airports = [];
+let trees = [];
 
 // Create a popup, but don't add it to the map yet.
 const popup = new mapboxgl.Popup({
@@ -66,14 +66,11 @@ function normalize(string) {
   return string.trim().toLowerCase();
 }
 
-// Because features come from tiled vector data,
-// feature geometries may be split
-// or duplicated across tile boundaries.
-// As a result, features may appear
-// multiple times in query results.
 function getUniqueFeatures(features, comparatorProperty) {
+
   const uniqueIds = new Set();
   const uniqueFeatures = [];
+
   for (const feature of features) {
     const id = feature.properties[comparatorProperty];
     if (!uniqueIds.has(id)) {
@@ -81,7 +78,30 @@ function getUniqueFeatures(features, comparatorProperty) {
       uniqueFeatures.push(feature);
     }
   }
+
   return uniqueFeatures;
+}
+
+function resetMap() {
+  console.log("this should work");
+  const features = map.queryRenderedFeatures({
+    layers: ['data-driven-circles']
+  });
+
+  features.sort(function(a, b){return a.properties.dst - b.properties.dst});
+
+  if (features) {
+    const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
+    // Populate features for the listing overlay.
+    renderListings(uniqueFeatures);
+
+    // Clear the input container
+    filterEl.value = '';
+
+    // Store the current features in sn `airports` variable to
+    // later use for filtering on `keyup`.
+    trees = uniqueFeatures;
+  }
 }
 
 map.on('mouseenter', 'data-driven-circles', (event) => {
@@ -121,12 +141,9 @@ map.on('moveend', () => {
     // Populate features for the listing overlay.
     renderListings(uniqueFeatures);
 
-    // Clear the input container
-    filterEl.value = '';
-
     // Store the current features in sn `airports` variable to
     // later use for filtering on `keyup`.
-    airports = uniqueFeatures;
+    trees = uniqueFeatures;
   }
 });
 
@@ -147,7 +164,7 @@ map.on('load', () => {
 
     // Store the current features in sn `airports` variable to
     // later use for filtering on `keyup`.
-    airports = uniqueFeatures;
+    trees = uniqueFeatures;
   }
 });
 
@@ -170,7 +187,7 @@ filterEl.addEventListener('keyup', (e) => {
   // Filter visible features that match the input value.
   const filtered = [];
 
-  for (const feature of airports) {
+  for (const feature of trees) {
     const name = normalize(feature.properties.LATBOOMSOORT);
     const code = normalize(feature.properties.GENUS);
     if (name.includes(value) || code.includes(value)) {
