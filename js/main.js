@@ -4,7 +4,7 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/tsegers/ckuza4luy0mlk15o9d0zoiu1f',
   // style: 'mapbox://styles/mapbox/light-v10',
-  zoom: 13,
+  zoom: 15,
   minZoom: 13,
   center: [4.418412511712686, 51.20279712915063]
 })
@@ -23,9 +23,14 @@ const listingEl = document.getElementById('feature-listing');
 function renderListings(features) {
   const empty = document.createElement('h3');
 
+  const featuresLength = document.getElementById('feature-length');
+  let length = `Aantal bomen gevonden: ${features.length}`;
+  featuresLength.innerHTML = length;
+
   // Clear any existing listings
   listingEl.innerHTML = '';
   if (features.length) {
+
     for (const feature of features) {
       const itemLink = document.createElement('a');
       let label = `${feature.properties.LATBOOMSOORT} <span>${Math.round(feature.properties.dst)}m</span>`;
@@ -112,7 +117,7 @@ map.on('moveend', () => {
   features.sort(function(a, b){return a.properties.dst - b.properties.dst});
 
   if (features) {
-    const uniqueFeatures = getUniqueFeatures(features, 'LATBOOMSOORT');
+    const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
     // Populate features for the listing overlay.
     renderListings(uniqueFeatures);
 
@@ -133,7 +138,7 @@ map.on('load', () => {
   features.sort(function(a, b){return a.properties.dst - b.properties.dst});
 
   if (features) {
-    const uniqueFeatures = getUniqueFeatures(features, 'LATBOOMSOORT');
+    const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
     // Populate features for the listing overlay.
     renderListings(uniqueFeatures);
 
@@ -180,9 +185,9 @@ filterEl.addEventListener('keyup', (e) => {
   if (filtered.length) {
     map.setFilter('data-driven-circles', [
       'match',
-      ['get', 'LATBOOMSOORT'],
+      ['get', 'OBJECTID'],
       filtered.map((feature) => {
-        return feature.properties.LATBOOMSOORT;
+        return feature.properties.OBJECTID;
       }),
       true,
       false
