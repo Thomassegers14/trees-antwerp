@@ -1,3 +1,11 @@
+const hideStartScreen = function() {
+  d3.selectAll('.startScreen')
+    .transition()
+    .duration(500)
+    .style('opacity', 0)
+    .remove()
+}
+
 mapboxgl.accessToken = 'pk.eyJ1IjoidHNlZ2VycyIsImEiOiJja3V6YTNwZ2cwdnlrMnZxcWJvZW44MnpxIn0.-psrOHgbMYwM1XEDMK2AOA';
 
 const map = new mapboxgl.Map({
@@ -95,7 +103,9 @@ map.on('load', () => {
     layers: ['data-driven-circles']
   });
 
-  features.sort(function(a, b){return a.properties.dst - b.properties.dst});
+  features.sort(function(a, b) {
+    return a.properties.dst - b.properties.dst
+  });
 
   if (features) {
     const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');
@@ -113,7 +123,9 @@ map.on('load', () => {
       layers: ['data-driven-circles']
     });
 
-    features.sort(function(a, b){return a.properties.dst - b.properties.dst});
+    features.sort(function(a, b) {
+      return a.properties.dst - b.properties.dst
+    });
 
     if (features) {
       const uniqueFeatures = getUniqueFeatures(features, 'OBJECTID');

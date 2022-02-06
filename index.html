@@ -11,6 +11,7 @@
 
 	<link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
 	<script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v6.js"></script>
 	<script defer src="js/main.js"></script>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap" />
@@ -19,6 +20,13 @@
 </head>
 
 <body>
+  <div class="startScreen">
+    <div class="startScreen__element">
+      <p class="startScreen__text">Studying landscape architecture, my girlfriend had to collect leaves and branches from 47 different species of trees.</p>
+      <p class="startScreen__text">Luckely Antwerp, the city where we live, has catalogued all the trees in the city. It made it easy for me to map the trees she needed to find.</p>
+      <button class="startScreen__button" type="button" name="button" onclick="hideStartScreen()">Let's go</button>
+    </div>
+  </div>
 	<div id="map"></div>
 	<div class="map-overlay">
 		<fieldset>
